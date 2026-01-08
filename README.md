@@ -48,7 +48,7 @@ You're coding with Claude Code. Everything is going great. Then suddenly:
 Error: Rate limit exceeded. Please try again later.
 ```
 
-😱 Your **$200/month Max plan** quota is gone. No warning. No visibility. You have to wait hours.
+😱 Your **$$100 or 200/month Max plan** quota is gone. No warning. No visibility. You have to wait hours.
 
 **Claude Cruise fixes this** by:
 - 🔮 **Predicting** when you'll hit the limit
@@ -73,7 +73,7 @@ Before you start, make sure you have:
 
 ---
 
-## 🚀 Quick Start for Beginners
+## 🚀 Quick Start 
 
 ### Two Ways to Use Claude Cruise
 
@@ -343,26 +343,6 @@ export ANTHROPIC_API_KEY="sk-ant-api03-..."   # macOS/Linux
 echo $env:ANTHROPIC_BASE_URL   # Windows PowerShell
 echo $ANTHROPIC_BASE_URL       # macOS/Linux
 # Should show: http://localhost:4141
-```
-
----
-
-## 📁 Project Structure
-
-```
-claude-cruise/
-├── src/
-│   ├── proxy/           # Main proxy server
-│   │   ├── server.ts    # Hono server, handles all requests
-│   │   └── dashboard.html # Web dashboard UI
-│   ├── router/          # Smart routing logic
-│   │   └── index.ts     # Decides which model to use
-│   ├── predictor/       # Rate limit prediction
-│   ├── storage/         # SQLite database for logs
-│   └── cli/             # Terminal UI
-├── package.json
-├── tsconfig.json
-└── README.md            # This file!
 ```
 
 ---
