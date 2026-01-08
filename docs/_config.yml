@@ -1,0 +1,7 @@
+theme: null
+title: Claude Cruise
+description: Never hit a rate limit again. Smart proxy for Claude Code.
+baseurl: /claude-cruise
+url: https://amitlals.github.io
+include:
+  - docs
