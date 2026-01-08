@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+.npm
+
+# Build output
+dist/
+build/
+*.js.map
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Coverage
+coverage/
+
+# Misc
+.cache/
+tmp/
+temp/
