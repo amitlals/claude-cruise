@@ -1,0 +1,191 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Claude Cruise Configuration
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# Copy this file to ~/.cruise/config.yaml and customize as needed.
+# Environment variables can be used with ${VAR_NAME} syntax.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Proxy Settings
+# ─────────────────────────────────────────────────────────────────────────────
+proxy:
+  port: 4141
+  host: localhost
+  
+  # Auto-set ANTHROPIC_BASE_URL when starting
+  auto_configure: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Provider Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+providers:
+  # Primary - Anthropic (uses existing ANTHROPIC_API_KEY)
+  anthropic:
+    enabled: true
+    api_key: ${ANTHROPIC_API_KEY}
+    models:
+      - claude-sonnet-4-20250514
+      - claude-3-5-haiku-20241022
+      - claude-opus-4-20250514
+  
+  # Fallback 1 - OpenRouter
+  openrouter:
+    enabled: false  # Set to true and add API key to enable
+    api_key: ${OPENROUTER_API_KEY}
+    endpoint: https://openrouter.ai/api/v1
+    models:
+      - anthropic/claude-3.5-sonnet
+      - anthropic/claude-3.5-haiku
+      - google/gemini-2.0-flash-thinking-exp
+  
+  # Fallback 2 - Local Ollama
+  ollama:
+    enabled: false  # Set to true if running Ollama locally
+    endpoint: http://localhost:11434
+    models:
+      - qwen2.5-coder:32b
+      - codellama:34b
+      - deepseek-coder-v2:latest
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Prediction Settings
+# ─────────────────────────────────────────────────────────────────────────────
+prediction:
+  # Anthropic's billing window (hours)
+  window_hours: 5
+  
+  # Alert when reaching this percentage of predicted limit
+  alert_threshold: 75
+  
+  # Conservative estimate until we learn actual limits
+  default_limit_tokens: 500000
+  
+  # Velocity calculation window (minutes)
+  velocity_window: 30
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Auto-Routing Rules
+# ─────────────────────────────────────────────────────────────────────────────
+routing:
+  # Mode: manual (never auto-switch), semi-auto (ask first), full-auto (automatic)
+  mode: semi-auto
+  
+  # Enable automatic routing
+  enabled: true
+  
+  # Rules evaluated in order, first match wins
+  rules:
+    # Switch to Haiku for simple tasks when usage is high
+    - name: "High usage simple tasks"
+      condition:
+        usage_percent: ">= 70"
+        task_type: simple  # formatting, small edits, lint fixes
+      action:
+        provider: anthropic
+        model: claude-3-5-haiku-20241022
+    
+    # Switch to OpenRouter when approaching limit
+    - name: "Approaching limit"
+      condition:
+        usage_percent: ">= 85"
+      action:
+        provider: openrouter
+        model: anthropic/claude-3.5-sonnet
+    
+    # Use local model when near/at limit
+    - name: "At limit"
+      condition:
+        usage_percent: ">= 95"
+      action:
+        provider: ollama
+        model: qwen2.5-coder:32b
+    
+    # Always use local for background tasks (tests, docs)
+    - name: "Background tasks"
+      condition:
+        task_type: background
+      action:
+        provider: ollama
+        model: qwen2.5-coder:32b
+  
+  # Task type detection (regex patterns)
+  task_patterns:
+    simple:
+      - "format"
+      - "lint"
+      - "fix imports"
+      - "rename"
+      - "add comment"
+    background:
+      - "write tests"
+      - "generate docs"
+      - "update readme"
+      - "add types"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# UI Settings
+# ─────────────────────────────────────────────────────────────────────────────
+ui:
+  # Theme: claude, vscode-dark, catppuccin
+  theme: claude
+  
+  # Auto-detect VSCode terminal and use vscode-dark theme
+  auto_detect_vscode: true
+  
+  # Refresh interval (milliseconds)
+  refresh_ms: 1000
+  
+  # Show notifications
+  notifications:
+    enabled: true
+    # Desktop notifications (requires terminal-notifier on macOS)
+    desktop: false
+    # Sound alerts
+    sounds: false
+  
+  # Compact mode for tmux/sidebars
+  compact_mode: false
+  
+  # Show cost in real-time
+  show_cost: true
+  
+  # Show predictions
+  show_predictions: true
+  
+  # Show savings from routing
+  show_savings: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Data & Export Settings
+# ─────────────────────────────────────────────────────────────────────────────
+data:
+  # Database location
+  db_path: ~/.cruise/usage.db
+  
+  # Log retention (days)
+  retention_days: 90
+  
+  # Export format: csv, json, both
+  export_format: csv
+  
+  # Export location
+  export_path: ~/.cruise/exports
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Advanced Settings
+# ─────────────────────────────────────────────────────────────────────────────
+advanced:
+  # Debug mode - verbose logging
+  debug: false
+  
+  # Log all requests (may impact performance)
+  log_requests: true
+  
+  # Request timeout (seconds)
+  timeout: 120
+  
+  # Retry configuration
+  retry:
+    enabled: true
+    max_attempts: 3
+    backoff_ms: 1000
