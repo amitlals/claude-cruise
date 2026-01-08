@@ -30,6 +30,16 @@
     "claude-cruise"
   ],
   "author": "Amit Lal <amitlal@example.com>",
+  "contributors": [
+    {
+      "name": "GitHub Copilot",
+      "url": "https://github.com/features/copilot"
+    },
+    {
+      "name": "Claude Code",
+      "url": "https://www.anthropic.com/claude-code"
+    }
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
