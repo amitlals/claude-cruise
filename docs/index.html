@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Cruise - Never Hit a Rate Limit Again</title>
+  <meta name="description" content="Smart proxy for Claude Code that prevents rate limits with auto-routing and real-time usage monitoring.">
+  <meta name="keywords" content="Claude, Claude Code, rate limit, proxy, Anthropic, AI, developer tools">
+  <meta property="og:title" content="Claude Cruise - Never Hit a Rate Limit Again">
+  <meta property="og:description" content="Smart proxy for Claude Code that prevents rate limits with auto-routing.">
+  <meta property="og:image" content="https://amitlals.github.io/claude-cruise/assets/dashboard-preview.png">
+  <meta property="og:url" content="https://amitlals.github.io/claude-cruise">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0f;
+      --bg-card: #12121a;
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+      --coral: #f97066;
+      --emerald: #10b981;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #2e2e3a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      background: radial-gradient(ellipse at top, #1a1a2e 0%, var(--bg-dark) 70%);
+    }
+
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      color: var(--accent-light);
+      margin-bottom: 20px;
+      white-space: pre;
+      line-height: 1.2;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--text) 0%, var(--accent-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero .tagline {
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 600px;
+    }
+
+    .hero .highlight {
+      color: var(--coral);
+      font-weight: 600;
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 60px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: #1a1a24;
+      border-color: var(--accent);
+    }
+
+    /* Command Box */
+    .command-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 40px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      margin-bottom: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .command-box .prompt {
+      color: var(--emerald);
+    }
+
+    .command-box code {
+      color: var(--text);
+    }
+
+    .command-box .copy-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .command-box .copy-btn:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+
+    /* Dashboard Preview */
+    .dashboard-preview {
+      max-width: 1000px;
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
+    }
+
+    .dashboard-preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* If no image, show placeholder */
+    .dashboard-placeholder {
+      background: var(--bg-card);
+      padding: 60px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    /* Features Section */
+    .features {
+      padding: 100px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 60px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+      transition: all 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+    }
+
+    /* How It Works */
+    .how-it-works {
+      padding: 100px 20px;
+      background: var(--bg-card);
+    }
+
+    .how-it-works h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 60px;
+    }
+
+    .routing-diagram {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      text-align: center;
+    }
+
+    .routing-step {
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 16px;
+      position: relative;
+    }
+
+    .routing-step::after {
+      content: '→';
+      position: absolute;
+      right: -16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 1.5rem;
+    }
+
+    .routing-step:last-child::after {
+      display: none;
+    }
+
+    .routing-step .usage {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .routing-step .model {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .routing-step .cost {
+      font-size: 0.9rem;
+      color: var(--emerald);
+    }
+
+    .routing-step.active {
+      border-color: var(--emerald);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+    }
+
+    /* Quick Start */
+    .quick-start {
+      padding: 100px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .quick-start h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 60px;
+    }
+
+    .step {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 40px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      background: var(--accent);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+
+    .step-content p {
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .step-content pre {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      overflow-x: auto;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 60px 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .routing-diagram {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .routing-step::after {
+        display: none;
+      }
+
+      .command-box {
+        padding: 16px 20px;
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .routing-diagram {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-group {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <pre class="logo">   ██████╗██████╗ ██╗   ██╗██╗███████╗███████╗
+  ██╔════╝██╔══██╗██║   ██║██║██╔════╝██╔════╝
+  ██║     ██████╔╝██║   ██║██║███████╗█████╗  
+  ██║     ██╔══██╗██║   ██║██║╚════██║██╔══╝  
+  ╚██████╗██║  ██║╚██████╔╝██║███████║███████╗
+   ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝╚══════╝╚══════╝</pre>
+
+    <h1>Claude Cruise</h1>
+    <p class="tagline">
+      <span class="highlight">Never hit a rate limit again.</span><br>
+      Smart proxy for Claude Code with auto-routing & real-time monitoring.
+    </p>
+
+    <div class="btn-group">
+      <a href="https://github.com/amitlals/claude-cruise" class="btn btn-primary">
+        ⭐ Star on GitHub
+      </a>
+      <a href="https://github.com/amitlals/claude-cruise#-quick-start-for-beginners" class="btn btn-secondary">
+        📖 Documentation
+      </a>
+    </div>
+
+    <div class="command-box">
+      <span class="prompt">$</span>
+      <code>npx claude-cruise</code>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('npx claude-cruise')">📋</button>
+    </div>
+
+    <div class="dashboard-preview">
+      <img src="assets/dashboard-preview.png" alt="Claude Cruise Dashboard" 
+           onerror="this.parentElement.innerHTML='<div class=\'dashboard-placeholder\'><p>📊 Dashboard Preview</p><p style=\'margin-top:20px;font-size:0.9rem;\'>Real-time usage monitoring • Model status • Cost tracking</p></div>'">
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <h2>✨ Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔮</div>
+        <h3>Predictive Limits</h3>
+        <p>Learns your actual rate limits from 429 errors and predicts when you'll hit them with 87%+ confidence.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Auto-Routing</h3>
+        <p>Automatically switches to cheaper models (Haiku) or backup providers (OpenRouter, Ollama) as you approach limits.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Real-Time Dashboard</h3>
+        <p>Beautiful web dashboard showing usage, costs, model status, and routing activity at localhost:4141.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h3>Cost Savings</h3>
+        <p>Save 20-40% on typical usage by automatically routing to cheaper models for simple tasks.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>100% Local</h3>
+        <p>Your API keys never leave your machine. All data stays on your computer in a local SQLite database.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚀</div>
+        <h3>Zero Config</h3>
+        <p>Just run <code>npx claude-cruise</code> and point Claude Code to localhost:4141. That's it!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <h2>🔄 Auto-Routing Cascade</h2>
+    <div class="routing-diagram">
+      <div class="routing-step active">
+        <div class="usage">0% - 70%</div>
+        <div class="model">🟢 Claude Sonnet</div>
+        <div class="cost">$3/M tokens</div>
+      </div>
+      <div class="routing-step">
+        <div class="usage">70% - 85%</div>
+        <div class="model">🟡 Claude Haiku</div>
+        <div class="cost">$0.8/M (73% cheaper!)</div>
+      </div>
+      <div class="routing-step">
+        <div class="usage">85% - 95%</div>
+        <div class="model">🟠 OpenRouter</div>
+        <div class="cost">$3.5/M tokens</div>
+      </div>
+      <div class="routing-step">
+        <div class="usage">95%+</div>
+        <div class="model">🔴 Ollama</div>
+        <div class="cost">FREE (local)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="quick-start">
+    <h2>🚀 Quick Start</h2>
+    
+    <div class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h3>Set Your API Key</h3>
+        <p>Get your key from console.anthropic.com</p>
+        <pre>export ANTHROPIC_API_KEY="sk-ant-api03-..."</pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h3>Run Claude Cruise</h3>
+        <p>Start the proxy with one command</p>
+        <pre>npx claude-cruise</pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3>Point Claude Code to the Proxy</h3>
+        <p>In a new terminal, set the base URL</p>
+        <pre>export ANTHROPIC_BASE_URL="http://localhost:4141"</pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h3>Open the Dashboard</h3>
+        <p>Visit the web dashboard to monitor usage</p>
+        <pre>open http://localhost:4141</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="https://github.com/amitlals/claude-cruise">GitHub</a>
+      <a href="https://github.com/amitlals/claude-cruise/issues">Report Bug</a>
+      <a href="https://github.com/amitlals/claude-cruise#-faq">FAQ</a>
+      <a href="https://github.com/amitlals">@amitlals</a>
+    </div>
+    <p>MIT License © 2026 <a href="https://github.com/amitlals">Amit Lal</a></p>
+    <p style="margin-top: 16px; font-size: 0.85rem;">
+      Not affiliated with Anthropic PBC. Claude is a trademark of Anthropic.
+    </p>
+  </footer>
+</body>
+</html>
