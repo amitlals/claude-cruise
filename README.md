@@ -268,6 +268,9 @@ Open your browser to **http://localhost:4141** to see:
 | 📈 **Activity Feed** | Real-time log of all requests |
 | 🔄 **Routing Status** | Shows when auto-routing is active |
 
+Example -<br>
+<img width="410" height="554" alt="image" src="https://github.com/user-attachments/assets/e3e26cf5-88c3-489f-842e-a8a53069b265" />
+
 ---
 
 ## 🔄 How Auto-Routing Works
