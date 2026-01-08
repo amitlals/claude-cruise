@@ -424,12 +424,28 @@ Always review your API usage and costs through official provider dashboards.
 
 ---
 
+## 💖 Support This Project
+
+If Claude Cruise saves you time and frustration, consider supporting its development!
+
+<a href="https://ko-fi.com/amitlall" target="_blank">
+  <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi" />
+</a>
+
+Your support helps:
+- 🔧 Maintain and improve the codebase
+- 🚀 Add new features and providers
+- 📚 Keep documentation up-to-date
+- ☕ Fuel late-night coding sessions!
+
+---
+
 <div align="center">
 
 **⚡ Stop hitting rate limits. Start shipping.**
 
 Built with ❤️ by [Amit Lal](https://github.com/amitlals)
 
-[⭐ Star on GitHub](https://github.com/amitlals/claude-cruise) • [🐛 Report Bug](https://github.com/amitlals/claude-cruise/issues) • [💡 Request Feature](https://github.com/amitlals/claude-cruise/issues)
+[⭐ Star on GitHub](https://github.com/amitlals/claude-cruise) • [🐛 Report Bug](https://github.com/amitlals/claude-cruise/issues) • [💡 Request Feature](https://github.com/amitlals/claude-cruise/issues) • [☕ Buy Me a Coffee](https://ko-fi.com/amitlall)
 
 </div>
