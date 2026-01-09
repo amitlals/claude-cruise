@@ -29,7 +29,7 @@ It prevents rate limits by automatically switching to backup models when you're 
 
 ---
 
-## ⚠️ Important: What This Works With
+## ⚠️ Important: What This Works With (Before You Start)
 
 > **Claude Cruise works with API-based tools only.** It does NOT work with claude.ai web chat.
 
