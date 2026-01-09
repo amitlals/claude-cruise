@@ -23,6 +23,8 @@ It prevents rate limits by automatically switching to backup models when you're 
 
 [🚀 Quick Start](#-quick-start-for-beginners) • [📋 Prerequisites](#-prerequisites) • [🔄 How It Works](#-how-auto-routing-works) • [📺 Dashboard](#-web-dashboard) • [❓ FAQ](#-faq)
 
+![cruise](https://github.com/user-attachments/assets/1657952f-430f-4de4-960e-e72fd5decffd)
+
 </div>
 
 ---
