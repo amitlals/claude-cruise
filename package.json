@@ -8,9 +8,18 @@
     "cruise": "./dist/cli/index.js",
     "claude-cruise": "./dist/cli/index.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "tsx src/cli/index.tsx",
-    "build": "tsc && node dist/cli/index.js",
+    "build": "tsc",
+    "prepublishOnly": "npm run typecheck && npm run build",
     "start": "node dist/cli/index.js",
     "test": "vitest",
     "lint": "eslint src/",
