@@ -344,4 +344,6 @@ export async function startProxy(port = 4141) {
     return { server, store, config };
 }
 export default { createProxy, startProxy };
+// Auto-start when run directly
+startProxy();
 //# sourceMappingURL=server.js.map
