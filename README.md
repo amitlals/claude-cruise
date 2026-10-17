@@ -81,14 +81,16 @@ Before you start, make sure you have:
 
 | Method | Best For | Difficulty |
 |--------|----------|------------|
-| **[Option A: NPX](#option-a-use-npx-easiest)** | Quick start, no setup | ⭐ Easiest |
-| **[Option B: Clone Repo](#option-b-clone-from-github-for-developers)** | Developers, contributors | ⭐⭐ Medium |
+| **[Option A: NPX](#option-a-use-npx-easiest)** ⚠️ _Not yet available_ | Quick start, no setup | ⭐ Coming soon |
+| **[Option B: Clone Repo](#option-b-clone-from-github-for-developers)** ✅ _Recommended now_ | All users until npm publish | ⭐⭐ Medium |
 
 ---
 
 ## Option A: Use NPX (Easiest)
 
-This is the fastest way - just 3 commands!
+> ⚠️ **Not yet available** — The `claude-cruise` package has not been published to the npm registry yet. Running `npx claude-cruise` or `npm install claude-cruise` will return a 404 error. Please use [Option B](#option-b-clone-from-github-for-developers) until the package is published. Progress is tracked in [issue #5](https://github.com/amitlals/claude-cruise/issues/5).
+
+Once published, this will be the fastest way — just 3 commands!
 
 ### Step 1: Open Terminal
 
@@ -160,6 +162,7 @@ Use this if you want to:
 - Contribute to the project
 - Customize the code
 - Run from source
+- **Install and use claude-cruise right now** (npm package not yet published)
 
 ### Step 1: Fork the Repository (Optional)
 
