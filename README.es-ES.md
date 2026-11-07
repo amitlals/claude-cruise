@@ -23,7 +23,7 @@
 **Claude Cruise** es un proxy inteligente que se sitúa entre Claude Code y la API de Anthropic.  
 Previene los límites de tasa al cambiar automáticamente a modelos de respaldo cuando te acerques a tu cuota.
 
-[🚀 Inicio Rápido](#-quick-start-for-beginners) • [📋 Prerrequisitos](#-prerequisites) • [🔄 Cómo Funciona](#-how-auto-routing-works) • [📺 Panel Web](#-web-dashboard) • [❓ FAQ](#-faq)
+[🚀 Inicio Rápido](#-inicio-rápido) • [📋 Prerrequisitos](#-prerrequisitos) • [🔄 Cómo Funciona](#-cómo-funciona-el-enrutamiento-automático) • [📺 Panel Web](#-panel-web) • [❓ FAQ](#-preguntas-frecuentes-faq)
 
 ![cruise](https://github.com/user-attachments/assets/1657952f-430f-4de4-960e-e72fd5decffd)
 
@@ -83,8 +83,8 @@ Antes de comenzar, asegúrate de tener:
 
 | Método | Ideal para | Dificultad |
 |--------|----------|------------|
-| **[Opción A: Usar NPX](#option-a-use-npx-easiest)** | Inicio rápido, sin configuración | ⭐ Más fácil |
-| **[Opción B: Clonar Repositorio](#option-b-clone-from-github-for-developers)** | Desarrolladores, colaboradores | ⭐⭐ Media |
+| **[Opción A: Usar NPX](#opción-a-usar-npx-la-más-fácil)** | Inicio rápido, sin configuración | ⭐ Más fácil |
+| **[Opción B: Clonar Repositorio](#opción-b-clonar-desde-github-para-desarrolladores)** | Desarrolladores, colaboradores | ⭐⭐ Media |
 
 ---
 
